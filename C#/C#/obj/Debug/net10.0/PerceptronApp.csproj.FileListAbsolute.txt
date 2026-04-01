@@ -1,0 +1,14 @@
+C:\Users\andre\PerceptronApp\bin\Debug\net10.0\PerceptronApp.exe
+C:\Users\andre\PerceptronApp\bin\Debug\net10.0\PerceptronApp.deps.json
+C:\Users\andre\PerceptronApp\bin\Debug\net10.0\PerceptronApp.runtimeconfig.json
+C:\Users\andre\PerceptronApp\bin\Debug\net10.0\PerceptronApp.dll
+C:\Users\andre\PerceptronApp\bin\Debug\net10.0\PerceptronApp.pdb
+C:\Users\andre\PerceptronApp\obj\Debug\net10.0\PerceptronApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\andre\PerceptronApp\obj\Debug\net10.0\PerceptronApp.AssemblyInfoInputs.cache
+C:\Users\andre\PerceptronApp\obj\Debug\net10.0\PerceptronApp.AssemblyInfo.cs
+C:\Users\andre\PerceptronApp\obj\Debug\net10.0\PerceptronApp.csproj.CoreCompileInputs.cache
+C:\Users\andre\PerceptronApp\obj\Debug\net10.0\PerceptronApp.dll
+C:\Users\andre\PerceptronApp\obj\Debug\net10.0\refint\PerceptronApp.dll
+C:\Users\andre\PerceptronApp\obj\Debug\net10.0\PerceptronApp.pdb
+C:\Users\andre\PerceptronApp\obj\Debug\net10.0\PerceptronApp.genruntimeconfig.cache
+C:\Users\andre\PerceptronApp\obj\Debug\net10.0\ref\PerceptronApp.dll
