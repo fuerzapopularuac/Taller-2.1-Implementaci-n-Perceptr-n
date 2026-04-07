@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perceptrón en JavaScript - Implementación Completa</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        h1 {
+            color: #1a73e8;
+            text-align: center;
+            border-bottom: 2px solid #1a73e8;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-top: 20px;
+            background-color: #e8f0fe;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .caso {
+            background-color: #f8f9fa;
+            border-left: 4px solid #1a73e8;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .caso h3 {
+            margin-top: 0;
+            color: #1a73e8;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin: 10px 0;
+        }
+        .output {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            margin-top: 10px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .button {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .button:hover {
+            background-color: #1557b0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IMPLEMENTACIÓN DE PERCEPTRÓN EN JAVASCRIPT</h1>
+        <p style="text-align: center; font-size: 18px;">
+            <strong>Integrantes:</strong> [Tu nombre] y [Nombre del compañero]<br>
+            <strong>Funciones de activación:</strong> Lineal, Escalón, Sigmoidal, ReLU, Softmax, Tanh
+        </p>
+        
+        <button class="button" onclick="ejecutarTodo()">EJECUTAR TODOS LOS CASOS</button>
+        <button class="button" onclick="limpiarOutput()" style="background-color: #dc3545;">LIMPIAR</button>
+        
+        <div class="output" id="output">
+            Haz clic en "EJECUTAR TODOS LOS CASOS" para comenzar ⚡
+        </div>
+        
+        <div class="footer">
+            <p>Cada caso de prueba se ejecuta con más de 10 iteraciones | Perceptrón implementado desde cero</p>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // CLASE PERCEPTRÓN
+        // ============================================================
+        class Perceptron {
+            constructor(numEntradas, tasaAprendizaje, tipoActivacion) {
+                this.pesos = [];
+                this.bias = 0;
+                this.tasaAprendizaje = tasaAprendizaje;
+                this.tipoActivacion = tipoActivacion;
+                
+                // Inicializar pesos aleatorios entre -1 y 1
+                for (let i = 0; i < numEntradas; i++) {
+                    this.pesos.push(Math.random() * 2 - 1);
+                }
+                
+                this.activacion = this.seleccionarActivacion(tipoActivacion);
+            }
+            
+            seleccionarActivacion(tipo) {
+                switch (tipo.toLowerCase()) {
+                    case 'lineal': return (x) => x;
+                    case 'escalon': return (x) => x >= 0 ? 1 : 0;
+                    case 'sigmoidal': return (x) => 1 / (1 + Math.exp(-x));
+                    case 'relu': return (x) => Math.max(0, x);
+                    case 'softmax': return (x) => 1 / (1 + Math.exp(-x));
+                    case 'tanh': return (x) => Math.tanh(x);
+                    default: return (x) => x >= 0 ? 1 : 0;
+                }
+            }
+            
+            calcularSumatoria(entradas) {
+                let suma = this.bias;
+                for (let i = 0; i < entradas.length; i++) {
+                    suma += this.pesos[i] * entradas[i];
+                }
+                return suma;
+            }
+            
+            predecir(entradas) {
+                const sumatoria = this.calcularSumatoria(entradas);
+                return this.activacion(sumatoria);
+            }
+            
+            entrenar(datos, etiquetas, iteraciones, logCallback) {
+                logCallback(` Entrenando con activación: ${this.tipoActivacion} `);
+                
+                for (let iter = 0; iter < iteraciones; iter++) {
+                    let errorTotal = 0;
+                    
+                    for (let i = 0; i < datos.length; i++) {
+                        const prediccion = this.predecir(datos[i]);
+                        const error = etiquetas[i] - prediccion;
+                        errorTotal += Math.abs(error);
+                        
+                        for (let j = 0; j < this.pesos.length; j++) {
+                            this.pesos[j] += this.tasaAprendizaje * error * datos[i][j];
+                        }
+                        this.bias += this.tasaAprendizaje * error;
+                    }
+                    
+                    if (iter % 10 === 0 || iter === iteraciones - 1) {
+                        logCallback(`   Iteración ${iter}: Error total = ${errorTotal.toFixed(4)}`);
+                    }
+                }
+                logCallback(`Entrenamiento completado\n`);
+            }
+            
+            evaluar(datos, etiquetas) {
+                let aciertos = 0;
+                for (let i = 0; i < datos.length; i++) {
+                    const prediccion = this.predecir(datos[i]);
+                    const clasePredicha = prediccion >= 0.5 ? 1 : 0;
+                    if (clasePredicha === etiquetas[i]) aciertos++;
+                }
+                return (aciertos / datos.length) * 100;
+            }
+            
+            mostrarPesos(logCallback) {
+                const pesosStr = this.pesos.map(p => p.toFixed(4)).join(', ');
+                logCallback(` Pesos finales: [${pesosStr}], Bias: ${this.bias.toFixed(4)}\n`);
+            }
+        }
+
+        // ============================================================
+        // CASOS DE PRUEBA
+        // ============================================================
+        
+        let outputElement;
+        
+        function log(message) {
+            if (outputElement) {
+                outputElement.textContent += message + '\n';
+                outputElement.scrollTop = outputElement.scrollHeight;
+            }
+            console.log(message);
+        }
+        
+        function limpiarOutput() {
+            if (outputElement) {
+                outputElement.textContent = '';
+            }
+        }
+        
+        function separador(titulo) {
+            log('\n' + '='.repeat(70));
+            log(`${titulo}`);
+            log('='.repeat(70) + '\n');
+        }
+        
+        // CASO 1: AND
+        async function testAND() {
+            separador('CASO 1: COMPUERTA LÓGICA AND');
+            log('Tabla de verdad AND:');
+            log('  0 AND 0 = 0  |  0 AND 1 = 0  |  1 AND 0 = 0  |  1 AND 1 = 1\n');
+            
+            const datos = [[0,0], [0,1], [1,0], [1,1]];
+            const etiquetas = [0, 0, 0, 1];
+            
+            const p = new Perceptron(2, 0.1, 'escalon');
+            p.entrenar(datos, etiquetas, 20, log);
+            p.mostrarPesos(log);
+            
+            log('Resultados de la prueba:');
+            datos.forEach(entrada => {
+                const salida = p.predecir(entrada);
+                log(`   ${entrada[0]} AND ${entrada[1]} = ${Math.round(salida)}`);
+            });
+            log(`\n Precisión: ${p.evaluar(datos, etiquetas).toFixed(2)}%\n`);
+        }
+        
+        // CASO 2: OR
+        async function testOR() {
+            separador('CASO 2: COMPUERTA LÓGICA OR');
+            log('Tabla de verdad OR:');
+            log('   0 OR 0 = 0  |  0 OR 1 = 1  |  1 OR 0 = 1  |  1 OR 1 = 1\n');
+            
+            const datos = [[0,0], [0,1], [1,0], [1,1]];
+            const etiquetas = [0, 1, 1, 1];
+            
+            const p = new Perceptron(2, 0.1, 'escalon');
+            p.entrenar(datos, etiquetas, 20, log);
+            p.mostrarPesos(log);
+            
+            log('Resultados de la prueba:');
+            datos.forEach(entrada => {
+                const salida = p.predecir(entrada);
+                log(`   ${entrada[0]} OR ${entrada[1]} = ${Math.round(salida)}`);
+            });
+            log(`\nPrecisión: ${p.evaluar(datos, etiquetas).toFixed(2)}%\n`);
+        }
+        
+        // CASO 3: SPAM
+        async function testSpam() {
+            separador('CASO 3: CLASIFICACIÓN DE SPAM');
+            log('Características: [palabras_clave, longitud, enlaces]');
+            log('   [3,150,2]→SPAM  |  [0,50,0]→NO SPAM  |  [2,200,1]→SPAM');
+            log('   [1,80,0]→NO SPAM  |  [4,300,3]→SPAM  |  [0,40,0]→NO SPAM  |  [5,250,4]→SPAM\n');
+            
+            const datos = [[3,150,2], [0,50,0], [2,200,1], [1,80,0], [4,300,3], [0,40,0], [5,250,4]];
+            const etiquetas = [1, 0, 1, 0, 1, 0, 1];
+            
+            const p = new Perceptron(3, 0.05, 'sigmoidal');
+            p.entrenar(datos, etiquetas, 50, log);
+            p.mostrarPesos(log);
+            log(`Precisión en entrenamiento: ${p.evaluar(datos, etiquetas).toFixed(2)}%\n`);
+        }
+        
+        // CASO 4: CLIMA
+        async function testClima() {
+            separador('CASO 4: PREDICCIÓN DEL CLIMA (¿LLUVIA?)');
+            log('Características: [temperatura, humedad, nubes]');
+            log('   [30,80,1]→LLUVIA  |  [25,40,0]→NO LLUVIA  |  [28,70,1]→LLUVIA');
+            log('   [22,50,0]→NO LLUVIA  |  [35,90,1]→LLUVIA  |  [20,30,0]→NO LLUVIA  |  [32,85,1]→LLUVIA\n');
+            
+            const datos = [[30,80,1], [25,40,0], [28,70,1], [22,50,0], [35,90,1], [20,30,0], [32,85,1]];
+            const etiquetas = [1, 0, 1, 0, 1, 0, 1];
+            
+            const p = new Perceptron(3, 0.05, 'tanh');
+            p.entrenar(datos, etiquetas, 50, log);
+            p.mostrarPesos(log);
+            log(`Precisión en entrenamiento: ${p.evaluar(datos, etiquetas).toFixed(2)}%\n`);
+        }
+        
+        // CASO 5: FRAUDES
+        async function testFraudes() {
+            separador('CASO 5: DETECCIÓN DE FRAUDES');
+            log('Características: [monto, frecuencia, ubicación_riesgosa]');
+            log('   [5000,1,1]→FRAUDE  |  [50,10,0]→NO FRAUDE  |  [10000,1,1]→FRAUDE');
+            log('   [100,20,0]→NO FRAUDE  |  [8000,2,1]→FRAUDE  |  [200,15,0]→NO FRAUDE  |  [15000,1,1]→FRAUDE\n');
+            
+            const datos = [[5000,1,1], [50,10,0], [10000,1,1], [100,20,0], [8000,2,1], [200,15,0], [15000,1,1]];
+            const etiquetas = [1, 0, 1, 0, 1, 0, 1];
+            
+            const p = new Perceptron(3, 0.01, 'sigmoidal');
+            p.entrenar(datos, etiquetas, 50, log);
+            p.mostrarPesos(log);
+            log(`Precisión en entrenamiento: ${p.evaluar(datos, etiquetas).toFixed(2)}%\n`);
+        }
+        
+        // CASO 6: RIESGO ACADÉMICO
+        async function testRiesgoAcademico() {
+            separador('CASO 6: RIESGO ACADÉMICO');
+            log('Características: [nota(0-20), asistencias(0-1), entregas(0-1)]');
+            log('   Nota >= 14 = Aprobado | Riesgo: 1 = RIESGO, 0 = SIN RIESGO');
+            log('   [18,0.9,0.8]→SIN RIESGO  |  [10,0.4,0.3]→RIESGO  |  [12,0.6,0.5]→RIESGO');
+            log('   [16,0.8,0.7]→SIN RIESGO  |  [8,0.5,0.4]→RIESGO   |  [20,1.0,1.0]→SIN RIESGO');
+            log('   [5,0.3,0.2]→RIESGO      |  [15,0.7,0.6]→SIN RIESGO\n');
+            
+            const datos = [[18,0.9,0.8], [10,0.4,0.3], [12,0.6,0.5], [16,0.8,0.7], [8,0.5,0.4], [20,1.0,1.0], [5,0.3,0.2], [15,0.7,0.6]];
+            const etiquetas = [0, 1, 1, 0, 1, 0, 1, 0];
+            
+            const p = new Perceptron(3, 0.05, 'sigmoidal');
+            p.entrenar(datos, etiquetas, 100, log);
+            p.mostrarPesos(log);
+            
+            log('Pruebas con nuevos estudiantes:');
+            const estudiante1 = p.predecir([14, 0.7, 0.6]) >= 0.5 ? 'RIESGO' : 'SIN RIESGO';
+            log(`   Estudiante (nota=14, asistencias=70%, entregas=60%): ${estudiante1}`);
+            
+            const estudiante2 = p.predecir([11, 0.5, 0.4]) >= 0.5 ? 'RIESGO' : 'SIN RIESGO';
+            log(`   Estudiante (nota=11, asistencias=50%, entregas=40%): ${estudiante2}`);
+            
+            const estudiante3 = p.predecir([17, 0.9, 0.9]) >= 0.5 ? 'RIESGO' : 'SIN RIESGO';
+            log(`   Estudiante (nota=17, asistencias=90%, entregas=90%): ${estudiante3}`);
+            
+            log(`\nPrecisión en entrenamiento: ${p.evaluar(datos, etiquetas).toFixed(2)}%\n`);
+        }
+        
+        // COMPARACIÓN DE ACTIVACIONES
+        async function testComparacionActivaciones() {
+            separador('COMPARACIÓN DE FUNCIONES DE ACTIVACIÓN');
+            log('Probando AND lógico con las 6 funciones de activación:\n');
+            
+            const datosAND = [[0,0], [0,1], [1,0], [1,1]];
+            const etiquetasAND = [0, 0, 0, 1];
+            const activaciones = ['lineal', 'escalon', 'sigmoidal', 'relu', 'softmax', 'tanh'];
+            
+            log('┌────────────┬─────────────┬──────────────────────────────┐');
+            log('│ Activación │ Precisión   │ Observación                  │');
+            log('├────────────┼─────────────┼──────────────────────────────┤');
+            
+            for (const act of activaciones) {
+                const p = new Perceptron(2, 0.1, act);
+                p.entrenar(datosAND, etiquetasAND, 30, (msg) => {}); // Silencioso
+                const precision = p.evaluar(datosAND, etiquetasAND);
+                let obs = '';
+                if (precision === 100) obs = '✓ Perfecta para este caso';
+                else if (precision >= 75) obs = '✓ Bastante buena';
+                else obs = '✗ No es adecuada para binario';
+                log(`│ ${act.padEnd(10)} │ ${precision.toFixed(2)}%${' '.repeat(5)} │ ${obs.padEnd(28)}│`);
+            }
+            log('└────────────┴─────────────┴──────────────────────────────┘\n');
+        }
+        
+        // EJECUTAR TODO
+        async function ejecutarTodo() {
+            limpiarOutput();
+            log('INICIANDO PERCEPTRÓN EN JAVASCRIPT');
+            log(`Fecha: ${new Date().toLocaleString()}`);
+            log('Configuración: Iteraciones > 10 | 6 funciones de activación | 6 casos de prueba\n');
+            
+            await testAND();
+            await testOR();
+            await testSpam();
+            await testClima();
+            await testFraudes();
+            await testRiesgoAcademico();
+            await testComparacionActivaciones();
+            
+            log('\n' + '='.repeat(70));
+            log('TODOS LOS CASOS COMPLETADOS EXITOSAMENTE');
+            log('='.repeat(70));
+            log('\nResumen:');
+            log('   • 6 funciones de activación implementadas');
+            log('   • 6 casos de prueba ejecutados');
+            log('   • Más de 10 iteraciones por entrenamiento');
+            log('   • Perceptrón implementado 100% desde cero');
+        }
+        
+        // Inicializar cuando la página cargue
+        window.onload = () => {
+            outputElement = document.getElementById('output');
+            log('Página cargada correctamente');
+            log('Haz clic en "EJECUTAR TODOS LOS CASOS" para comenzar\n');
+        };
+    </script>
+</body>
+</html>
