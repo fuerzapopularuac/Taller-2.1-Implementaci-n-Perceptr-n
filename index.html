@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Infografía: Taller CNN | Fuenza Popular</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #e0eafc 0%, #cfdef3 100%);
+            font-family: 'Inter', sans-serif;
+            padding: 40px 24px;
+            color: #1a2c3e;
+        }
+
+        /* contenedor principal tipo poster */
+        .infografia {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 48px;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.35);
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        /* header con gradiente y datos */
+        .hero {
+            background: linear-gradient(135deg, #0b2b3b 0%, #1c4e6f 100%);
+            padding: 2.2rem 3rem 2rem 3rem;
+            color: white;
+        }
+
+        .hero-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 1.2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 0.8rem;
+        }
+
+        .titulo-principal h1 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(120deg, #fff, #b8e1fc);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .titulo-principal p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 6px;
+        }
+
+        .badge-porcentaje {
+            background: rgba(255,255,240,0.15);
+            backdrop-filter: blur(4px);
+            padding: 8px 18px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .equipo {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            gap: 1rem;
+        }
+        .integrantes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            font-weight: 500;
+        }
+        .integrantes span {
+            background: rgba(255,255,255,0.12);
+            padding: 6px 15px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .docente {
+            font-size: 0.85rem;
+            background: #00000030;
+            padding: 6px 14px;
+            border-radius: 30px;
+        }
+
+        /* grid de casos */
+        .casos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 28px;
+            padding: 3rem 2.5rem;
+            background: #fefefe;
+        }
+
+        .card {
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 15px 30px -12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s;
+            overflow: hidden;
+            border: 1px solid #eef2f9;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 25px 35px -14px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            padding: 1.2rem 1.5rem 0.8rem 1.5rem;
+            border-bottom: 2px solid #eef2ff;
+        }
+        .nivel {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 30px;
+            margin-bottom: 12px;
+            letter-spacing: 0.3px;
+        }
+        .nivel.facil { background: #d0f0d0; color: #1f5f1f; }
+        .nivel.intermedio-bajo { background: #ffe2c2; color: #b45f1b; }
+        .nivel.intermedio { background: #ffe2c2; color: #b45f1b; }
+        .nivel.intermedio-alto { background: #ffd6b3; color: #b45f1b; }
+        .nivel.avanzado { background: #fcd0d0; color: #a12323; }
+
+        .card-header h3 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            margin: 8px 0 5px;
+        }
+        .detalle {
+            font-size: 0.8rem;
+            color: #4a627a;
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .card-body {
+            padding: 1.2rem 1.5rem 1.5rem;
+        }
+        .metricas {
+            background: #f7f9fe;
+            border-radius: 24px;
+            padding: 12px 16px;
+            margin: 15px 0;
+        }
+        .metricas-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin: 8px 0;
+            font-weight: 500;
+        }
+        .accuracy {
+            color: #1f8a4c;
+            font-weight: 800;
+        }
+        .chip {
+            font-family: monospace;
+            background: #eef2ff;
+            padding: 3px 8px;
+            border-radius: 18px;
+            font-size: 0.7rem;
+        }
+        .icon-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 12px 0 8px;
+            font-size: 0.8rem;
+        }
+        hr {
+            margin: 14px 0;
+            border: 0;
+            height: 1px;
+            background: #e2e8f0;
+        }
+
+        .conclusiones-section {
+            background: #f0f4fa;
+            padding: 2rem 2.5rem;
+            border-top: 1px solid #dce5f0;
+            border-bottom: 1px solid #dce5f0;
+        }
+        .conclusiones-section h2 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            color: #0f2b3b;
+        }
+        .conclusion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+        .conclusion-card {
+            background: white;
+            border-radius: 24px;
+            padding: 1.2rem 1.2rem;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.03);
+            border-left: 5px solid #2c7da0;
+        }
+        .conclusion-card strong {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .sugerencia {
+            margin-top: 1.2rem;
+            background: #e9f3ec;
+            border-radius: 20px;
+            padding: 1rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            background: #0e2a36;
+            color: #cbdde9;
+            padding: 1.5rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.75rem;
+        }
+        @media (max-width: 780px) {
+            .hero { padding: 1.5rem; }
+            .casos-grid { padding: 1.5rem; }
+            .conclusiones-section { padding: 1.5rem; }
+            .titulo-principal h1 { font-size: 1.6rem; }
+        }
+        i, .fas, .far { margin-right: 4px; }
+        .badge-dataset {
+            background: #eef2ff;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+<div class="infografia">
+    <div class="hero">
+        <div class="hero-top">
+            <div class="titulo-principal">
+                <h1>🧠 Taller 2.2 · Redes Neuronales Convolucionales</h1>
+                <p>Clasificación en datasets del mundo real: Fashion‑MNIST, CIFAR‑10, SVHN, EMNIST</p>
+            </div>
+            <div class="badge-porcentaje">
+                <i class="fas fa-chart-line"></i> Precisiones hasta 92% · Transferencia + Data Augmentation
+            </div>
+        </div>
+        <div class="equipo">
+            <div class="integrantes">
+                <span><i class="fas fa-user-astronaut"></i> Huarcaya Cabrera Yajaira</span>
+                <span><i class="fas fa-user-ninja"></i> La Torre Velazco Anthony Jareth</span>
+                <span><i class="fas fa-user-robot"></i> Socualaya Olivera Dante Joel</span>
+                <span><i class="fas fa-user-cog"></i> Tresierra Zamora Diego Andres</span>
+            </div>
+            <div class="docente">
+                <i class="fas fa-chalkboard-user"></i> Mg. Ing. Hugo Espetia Huamanga
+            </div>
+        </div>
+        <div style="margin-top: 20px; font-size: 0.8rem; display: flex; gap: 10px; flex-wrap: wrap;">
+            <span><i class="fas fa-calendar-alt"></i> Cusco - Perú 2026 - I</span>
+            <span><i class="fas fa-users"></i> Equipo: FUENZA POPULAR</span>
+        </div>
+    </div>
+
+    <!-- CASOS DE PRUEBA (4 principales) -->
+    <div class="casos-grid">
+        <!-- Fashion MNIST -->
+        <div class="card">
+            <div class="card-header">
+                <span class="nivel facil">🎯 Nivel Fácil</span>
+                <h3>Fashion-MNIST</h3>
+                <div class="detalle"><span><i class="fas fa-image"></i> 28x28 gris</span><span><i class="fas fa-tags"></i> 10 clases</span></div>
+            </div>
+            <div class="card-body">
+                <div class="metricas">
+                    <div class="metricas-item"><span>✅ Precisión test</span><span class="accuracy">~91.2%</span></div>
+                    <div class="metricas-item"><span>📉 Pérdida validación</span><span>0.207</span></div>
+                </div>
+                <div class="icon-text"><i class="fas fa-layer-group"></i> CNN: Conv2D(32,64) + MaxPool + Dropout(0.3)</div>
+                <div class="icon-text"><i class="fas fa-chart-simple"></i> 10 épocas · 60k entrenamiento</div>
+                <hr>
+                <span class="badge-dataset"><i class="fas fa-check-circle"></i> Buen baseline para moda</span>
+            </div>
+        </div>
+        <!-- CIFAR-10 -->
+        <div class="card">
+            <div class="card-header">
+                <span class="nivel intermedio-bajo">🌍 Nivel Intermedio-Bajo</span>
+                <h3>CIFAR-10</h3>
+                <div class="detalle"><span><i class="fas fa-palette"></i> 32x32 RGB</span><span><i class="fas fa-dog"></i> 10 objetos reales</span></div>
+            </div>
+            <div class="card-body">
+                <div class="metricas">
+                    <div class="metricas-item"><span>🎯 Accuracy test</span><span class="accuracy">75.67%</span></div>
+                    <div class="metricas-item"><span>🔻 Loss test</span><span>0.708</span></div>
+                </div>
+                <div class="icon-text"><i class="fas fa-cubes"></i> Arq. profunda: doble conv + padding='same'</div>
+                <div class="icon-text"><i class="fas fa-dice-d6"></i> Regularización: Dropout(0.3) · 50k train</div>
+                <hr>
+                <span class="badge-dataset"><i class="fas fa-lightbulb"></i> Reto: objetos no centrados, variabilidad intraclase</span>
+            </div>
+        </div>
+        <!-- SVHN -->
+        <div class="card">
+            <div class="card-header">
+                <span class="nivel intermedio">🏙️ Nivel Intermedio</span>
+                <h3>SVHN</h3>
+                <div class="detalle"><span><i class="fas fa-city"></i> Google Street View</span><span><i class="fas fa-phone"></i> Dígitos reales</span></div>
+            </div>
+            <div class="card-body">
+                <div class="metricas">
+                    <div class="metricas-item"><span>📊 Precisión validación</span><span class="accuracy">88.75%</span></div>
+                    <div class="metricas-item"><span>📉 Pérdida</span><span>0.3916</span></div>
+                </div>
+                <div class="icon-text"><i class="fas fa-cloud-sun"></i> Iluminación variable, oclusiones, fondos ruidosos</div>
+                <div class="icon-text"><i class="fas fa-microchip"></i> CNN adaptada: entrada 28x28 (reescalado) + Dropout</div>
+                <hr>
+                <span class="badge-dataset"><i class="fas fa-chart-line"></i> Evolución desde MNIST -> mundo real</span>
+            </div>
+        </div>
+        <!-- EMNIST (el tuyo) -->
+        <div class="card">
+            <div class="card-header">
+                <span class="nivel intermedio-alto">✍️ Nivel Intermedio-Alto</span>
+                <h3>EMNIST ByClass</h3>
+                <div class="detalle"><span><i class="fas fa-font"></i> 62 clases</span><span><i class="fas fa-chart-simple"></i> 814k caracteres</span></div>
+            </div>
+            <div class="card-body">
+                <div class="metricas">
+                    <div class="metricas-item"><span>🧠 Precisión esperada</span><span class="accuracy">~83% (5 épocas)</span></div>
+                    <div class="metricas-item"><span>⚙️ Dropout</span><span>0.3 · 3 capas conv</span></div>
+                </div>
+                <div class="icon-text"><i class="fas fa-random"></i> Confusiones típicas: O/0, I/l, S/5</div>
+                <div class="icon-text"><i class="fas fa-database"></i> TFDS: emnist/byclass · normalización + inversión</div>
+                <hr>
+                <span class="badge-dataset"><i class="fas fa-code-branch"></i> OCR manuscrito · 3 Conv + Dense 256</span>
+                <div style="margin-top: 10px; background: #eef2ff; border-radius: 16px; padding: 8px; font-size: 0.7rem; text-align: center;">
+                    <i class="fas fa-upload"></i> Función classify_uploaded_image() · pruebas con imágenes propias
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESULTADOS CLAVE + ARQUITECTURAS COMPARATIVAS -->
+    <div style="background: white; padding: 0 2rem 1.5rem 2rem;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; align-items: center;">
+            <div style="background: #eaf4ff; border-radius: 30px; padding: 12px 24px; flex:1;">
+                <i class="fas fa-chart-pie"></i> <strong> Comparativa de complejidad</strong><br>
+                <span style="font-size:0.8rem">Fashion-MNIST (fácil) → CIFAR-10 (color y contexto) → SVHN (ruido real) → EMNIST (62 clases, letras+dígitos)</span>
+            </div>
+            <div style="background: #eaf4ff; border-radius: 30px; padding: 12px 24px;">
+                <i class="fas fa-microchip"></i> <strong>Técnicas usadas:</strong> Data Augmentation, Dropout, Transfer Learning (propuesto para Tiny ImageNet)
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCLUSIONES Y SUGERENCIAS (por cada dataset con enfoque grupal) -->
+    <div class="conclusiones-section">
+        <h2><i class="fas fa-graduation-cap"></i> Conclusiones por caso de prueba</h2>
+        <div class="conclusion-grid">
+            <div class="conclusion-card">
+                <strong>📌 Fashion-MNIST</strong>
+                <p>CNN con 2 capas convolucionales logró ~92% de accuracy. Limitación: imágenes externas con baja resolución generan confusión entre clases similares (zapatilla vs bolso).</p>
+            </div>
+            <div class="conclusion-card">
+                <strong>🌿 CIFAR-10</strong>
+                <p>Precisión 75.67% demostró necesidad de arquitecturas más profundas. El color y objetos no centrados exigen mayor abstracción. El dropout evitó sobreajuste moderado.</p>
+            </div>
+            <div class="conclusion-card">
+                <strong>📸 SVHN</strong>
+                <p>Modelo robusto a dígitos reales (88.7% test). Sin embargo, requiere segmentación previa para imágenes con múltiples números. El ruido y oclusiones afectan confianza.</p>
+            </div>
+            <div class="conclusion-card">
+                <strong>🔤 EMNIST (tu aporte)</strong>
+                <p>Alto número de clases (62) impacta rendimiento: confusiones O/0, I/l. Arquitectura de 3 capas conv + Dropout(0.3) esencial. Recomendación: más épocas y EMNIST Balanced.</p>
+            </div>
+        </div>
+        <div class="sugerencia">
+            <i class="fas fa-lightbulb" style="margin-right: 12px;"></i> <strong>Sugerencias transversales para futuras mejoras:</strong><br>
+            • Aumento de datos (rotación, zoom, desplazamiento) para mejorar generalización.<br>
+            • Implementar aprendizaje por transferencia con redes preentrenadas (ResNet/EfficientNet) en Tiny ImageNet y datasets complejos.<br>
+            • Ajuste de hiperparámetros (learning rate decay, early stopping).<br>
+            • Para EMNIST: usar la variante Balanceada (47 clases) y aumentar épocas a 15-20.
+        </div>
+    </div>
+
+    <!-- SECCION DE RESULTADOS DESTACADOS: tabla rápida -->
+    <div style="padding: 2rem 2rem 1rem 2rem; background: #ffffff;">
+        <h3 style="display: flex; gap: 12px; align-items: center; margin-bottom: 1.2rem;"><i class="fas fa-chart-simple"></i> Resumen de métricas finales</h3>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #fdfdfd; border-radius: 24px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <thead style="background: #1c4e6f; color: white;">
+                    <tr><th style="padding: 12px;">Dataset</th><th>Precisión Test</th><th>Arquitectura destacada</th><th>Desafío principal</th></tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 10px;"><b>Fashion-MNIST</b></td><td>91.2%</td><td>2 Conv + Pooling + Dropout</td><td>Similitud visual entre prendas</td></tr>
+                    <tr style="border-bottom: 1px solid #ddd;"><td><b>CIFAR-10</b></td><td>75.67%</td><td>Bloques Conv dobles + padding</td><td>Imagen a color, objetos descentrados</td></tr>
+                    <tr style="border-bottom: 1px solid #ddd;"><td><b>SVHN</b></td><td>88.75%</td><td>CNN 2 capas + Dropout(0.3)</td><td>Iluminación, oclusiones</td></tr>
+                    <tr><td><b>EMNIST ByClass</b></td><td>~83% (5 épocas)</td><td>3 Conv (32,64,128) + Dense256</td><td>62 clases, caracteres manuscritos similares</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="margin-top: 28px; background: #f9fafc; border-radius: 28px; padding: 1rem 1.5rem; border: 1px solid #e2edf7;">
+            <i class="fas fa-code"></i> <strong>Implementación EMNIST (detalle propio del equipo):</strong> Carga con TFDS, pipeline con batch(128), normalización + inversión de colores para imágenes propias. Función <code>classify_uploaded_image()</code> permite testear caracteres manuscritos. Se evidenció la advertencia por input_shape pero no afecta el entrenamiento.
+        </div>
+    </div>
+
+    <!-- FOOTER CON REPOSITORIO Y LINKS SIMBOLICOS -->
+    <div class="footer">
+        <div><i class="fab fa-github"></i> Repositorio: github.com/fuerzapopularuac/Taller-2.2-CNN</div>
+        <div><i class="fas fa-file-alt"></i> Informe completo: Universidad Andina del Cusco - IA 2026-I</div>
+        <div><i class="fas fa-chalkboard"></i> Exposición: Redes Convolucionales en escenarios realistas</div>
+    </div>
+</div>
+</body>
+</html>
